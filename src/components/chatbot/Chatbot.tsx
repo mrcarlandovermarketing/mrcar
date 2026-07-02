@@ -38,6 +38,20 @@ function generateMessageId(prefix: string): string {
 }
 
 /**
+ * Safely generates a UUID with a fallback for older browsers or insecure contexts.
+ */
+function safeGenerateUUID(): string {
+  if (typeof window !== 'undefined' && typeof window.crypto !== 'undefined' && typeof window.crypto.randomUUID === 'function') {
+    return window.crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+/**
  * Safely extracts text from any message value, parsing nested JSON
  * objects if they accidentally pass through to the frontend.
  */
@@ -83,7 +97,7 @@ export function Chatbot() {
     if (typeof window !== 'undefined') {
       let id = localStorage.getItem('mrcar_chat_id');
       if (!id) {
-        id = crypto.randomUUID();
+        id = safeGenerateUUID();
         localStorage.setItem('mrcar_chat_id', id);
       }
       return id;
@@ -92,6 +106,11 @@ export function Chatbot() {
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Diagnostic log for mobile devices
+  useEffect(() => {
+    console.log("Chatbot mounted: mobile-fix-20260702");
+  }, []);
 
   // Load chat state and history on mount
   useEffect(() => {
@@ -176,7 +195,7 @@ export function Chatbot() {
   }, [isOpen]);
 
   const handleClearConversation = () => {
-    const newId = crypto.randomUUID();
+    const newId = safeGenerateUUID();
     localStorage.setItem('mrcar_chat_id', newId);
     setConversationId(newId);
     
@@ -347,7 +366,9 @@ export function Chatbot() {
       {!isOpen && (
         <button
           onClick={toggleChat}
-          className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-brand-red hover:bg-brand-red-hover text-white shadow-xl shadow-brand-red/20 transition-all hover:scale-105 active:scale-95 animate-bounce cursor-pointer"
+          data-chatbot-version="mobile-fix-20260702"
+          style={{ display: 'flex', visibility: 'visible', opacity: 1, pointerEvents: 'auto' }}
+          className="fixed right-4 bottom-32 z-[2147483647] flex h-14 w-14 items-center justify-center rounded-full bg-brand-red hover:bg-brand-red-hover text-white shadow-xl shadow-brand-red/20 transition-all hover:scale-105 active:scale-95 animate-bounce cursor-pointer opacity-100 visible pointer-events-auto"
           aria-label="Abrir asistente virtual"
         >
           <MessageSquare className="h-6 w-6" />
