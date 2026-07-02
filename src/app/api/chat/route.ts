@@ -8,6 +8,7 @@ import { AppsScriptConversationRepository } from '../../../infrastructure/apps-s
 import { buildMrCarSystemPrompt } from '../../../application/chat/buildMrCarSystemPrompt';
 import { OpenRouterChatService } from '../../../infrastructure/openrouter/OpenRouterChatService';
 import { parseChatReply } from '../../../application/chat/parseChatReply';
+import { env } from '../../../infrastructure/config/env';
 
 // 1. Zod input validation schema
 const chatRequestSchema = z.object({
@@ -439,6 +440,9 @@ export async function POST(req: NextRequest) {
 
     // Server-side logging without secrets (Requirement 1)
     console.log('[LEAD DEBUG LOG]', {
+      env: process.env.NODE_ENV || 'development',
+      hasApiUrl: !!env.APPS_SCRIPT_API_URL,
+      hasApiSecret: !!(process.env.APPS_SCRIPT_WRITE_SECRET || env.APPS_SCRIPT_WRITE_SECRET),
       hasName: Boolean(activeName?.trim()),
       hasPhone: Boolean(activePhone),
       phoneIsValid: isValidPhone(activePhone),

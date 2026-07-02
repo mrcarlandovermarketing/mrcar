@@ -341,13 +341,13 @@ export function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 font-sans">
+    <div className="font-sans">
       
       {/* Floating Button */}
       {!isOpen && (
         <button
           onClick={toggleChat}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-red hover:bg-brand-red-hover text-white shadow-xl shadow-brand-red/20 transition-all hover:scale-105 active:scale-95 animate-bounce cursor-pointer"
+          className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-brand-red hover:bg-brand-red-hover text-white shadow-xl shadow-brand-red/20 transition-all hover:scale-105 active:scale-95 animate-bounce cursor-pointer"
           aria-label="Abrir asistente virtual"
         >
           <MessageSquare className="h-6 w-6" />
@@ -356,7 +356,7 @@ export function Chatbot() {
 
       {/* Chat Container */}
       {isOpen && (
-        <div className="w-[340px] sm:w-[380px] h-[490px] rounded-2xl bg-zinc-900 border border-zinc-800 shadow-2xl flex flex-col overflow-hidden animate-fadeInUp">
+        <div className="fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] w-auto h-[490px] max-h-[75dvh] z-[9999] sm:left-auto sm:right-4 sm:w-[380px] rounded-2xl bg-zinc-900 border border-zinc-800 shadow-2xl flex flex-col overflow-hidden animate-fadeInUp">
           
           {/* Header */}
           <div className="bg-zinc-950 px-4 py-3 border-b border-zinc-850 flex items-center justify-between">

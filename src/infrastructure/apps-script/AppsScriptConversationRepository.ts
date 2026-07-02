@@ -8,9 +8,10 @@ export class AppsScriptConversationRepository implements ConversationRepository 
       return false;
     }
 
+    const apiSecret = process.env.APPS_SCRIPT_WRITE_SECRET || env.APPS_SCRIPT_WRITE_SECRET || '';
     const payload = {
       action: 'saveMessage',
-      apiSecret: env.APPS_SCRIPT_WRITE_SECRET,
+      apiSecret: apiSecret,
       ...message,
     };
 
