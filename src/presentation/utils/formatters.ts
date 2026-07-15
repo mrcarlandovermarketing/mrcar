@@ -1,7 +1,11 @@
 /**
  * Formats a numeric value into US dollar currency format (e.g., $17,900)
+ * Returns "Consultar precio" if the value is null or undefined.
  */
-export function formatCurrency(value: number): string {
+export function formatCurrency(value: number | null | undefined): string {
+  if (value === null || value === undefined) {
+    return 'Consultar precio';
+  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',

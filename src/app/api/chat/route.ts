@@ -363,7 +363,7 @@ export async function POST(req: NextRequest) {
       if (searchCriteria && (searchCriteria.make === 'Toyota' || searchCriteria.make === 'Honda')) {
         const matches = vehicles.filter((v) => {
           if (searchCriteria.make && v.make.toLowerCase() !== searchCriteria.make.toLowerCase()) return false;
-          if (searchCriteria.maxPrice && v.price > searchCriteria.maxPrice) return false;
+          if (searchCriteria.maxPrice && (v.price === null || v.price === undefined || v.price > searchCriteria.maxPrice)) return false;
           if (v.status === 'Oculto' || v.status === 'Vendido') return false;
           return true;
         });
@@ -373,7 +373,10 @@ export async function POST(req: NextRequest) {
           vehicleIds = matches.map((v) => v.id);
           const makeText = searchCriteria.make || 'vehículo';
           const matchesLines = matches
-            .map((v) => `• ${v.make} ${v.model} ${v.version || ''} ${v.year} — $${v.price.toLocaleString('en-US')} — ${v.status}.`.replace(/\s+/g, ' '))
+            .map((v) => {
+              const priceText = v.price !== null && v.price !== undefined ? `$${v.price.toLocaleString('en-US')}` : 'Precio a consultar';
+              return `• ${v.make} ${v.model} ${v.version || ''} ${v.year} — ${priceText} — ${v.status}.`.replace(/\s+/g, ' ');
+            })
             .join('\n');
           
           const matchCountWord = matches.length === 2 ? 'dos' : matches.length === 1 ? 'un' : String(matches.length);

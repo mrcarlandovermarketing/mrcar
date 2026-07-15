@@ -235,10 +235,14 @@ export default async function VehiclePage({ params }: PageProps) {
                   <span className="text-4xl font-extrabold text-white tracking-tight">
                     {formatCurrency(vehicle.price)}
                   </span>
-                  <span className="text-xs font-bold text-zinc-450">USD</span>
+                  {vehicle.price !== null && vehicle.price !== undefined && (
+                    <span className="text-xs font-bold text-zinc-450">USD</span>
+                  )}
                 </div>
                 <p className="text-zinc-550 text-[10px] mt-2 flex items-center gap-1.5 leading-normal">
-                  * Este es un precio aproximado que cubre el valor en origen, la subasta y la logística básica de exportación.
+                  {vehicle.price !== null && vehicle.price !== undefined
+                    ? '* Este es un precio aproximado que cubre el valor en origen, la subasta y la logística básica de exportación.'
+                    : '* Póngase en contacto con nosotros para recibir una cotización personalizada de este vehículo.'}
                 </p>
               </div>
 

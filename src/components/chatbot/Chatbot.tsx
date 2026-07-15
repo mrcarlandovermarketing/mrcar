@@ -13,7 +13,7 @@ interface ChatMessageVehicle {
   model: string;
   version: string;
   year: number;
-  price: number;
+  price: number | null;
   mileage: number;
   mainPhoto: string;
   slug: string;
@@ -454,7 +454,7 @@ export function Chatbot() {
                           <div className="flex justify-between items-baseline gap-1">
                             <span className="font-bold text-zinc-100 truncate">{car.make} {car.model}</span>
                             <span className="text-brand-red font-black flex-shrink-0">
-                              ${car.price.toLocaleString('en-US')}
+                              {car.price !== null && car.price !== undefined ? `$${car.price.toLocaleString('en-US')}` : 'Consultar'}
                             </span>
                           </div>
                           <p className="text-zinc-400 text-[9px] truncate">{car.version} • {car.year}</p>

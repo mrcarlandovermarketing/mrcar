@@ -18,7 +18,9 @@ export function VehicleActions({ vehicle }: VehicleActionsProps) {
     const pageUrl = window.location.href;
     const shareData = {
       title: `${vehicle.make} ${vehicle.model} ${vehicle.year} - Mr. Car`,
-      text: `Mira este ${vehicle.make} ${vehicle.model} ${vehicle.year} por ${formatCurrency(vehicle.price)} en Mr. Car.`,
+      text: vehicle.price !== null && vehicle.price !== undefined
+        ? `Mira este ${vehicle.make} ${vehicle.model} ${vehicle.year} por ${formatCurrency(vehicle.price)} en Mr. Car.`
+        : `Mira este ${vehicle.make} ${vehicle.model} ${vehicle.year} en Mr. Car.`,
       url: pageUrl,
     };
 

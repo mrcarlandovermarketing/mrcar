@@ -128,10 +128,10 @@ export function VehicleCatalog({ initialVehicles }: VehicleCatalogProps) {
 
     // 4. Price range
     if (minPriceParam) {
-      result = result.filter((v) => v.price >= parseFloat(minPriceParam));
+      result = result.filter((v) => v.price !== null && v.price >= parseFloat(minPriceParam));
     }
     if (maxPriceParam) {
-      result = result.filter((v) => v.price <= parseFloat(maxPriceParam));
+      result = result.filter((v) => v.price !== null && v.price <= parseFloat(maxPriceParam));
     }
 
     // 5. Year range
@@ -171,8 +171,14 @@ export function VehicleCatalog({ initialVehicles }: VehicleCatalogProps) {
     result.sort((a, b) => {
       switch (sortParam) {
         case 'price_asc':
+          if (a.price === null && b.price === null) return 0;
+          if (a.price === null) return 1;
+          if (b.price === null) return -1;
           return a.price - b.price;
         case 'price_desc':
+          if (a.price === null && b.price === null) return 0;
+          if (a.price === null) return 1;
+          if (b.price === null) return -1;
           return b.price - a.price;
         case 'year_desc':
           return b.year - a.year;

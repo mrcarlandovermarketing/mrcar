@@ -74,11 +74,11 @@ export class MockVehicleRepository implements VehicleRepository {
       }
 
       if (filters.minPrice !== undefined) {
-        result = result.filter((v) => v.price >= filters.minPrice!);
+        result = result.filter((v) => v.price !== null && v.price >= filters.minPrice!);
       }
 
       if (filters.maxPrice !== undefined) {
-        result = result.filter((v) => v.price <= filters.maxPrice!);
+        result = result.filter((v) => v.price !== null && v.price <= filters.maxPrice!);
       }
 
       if (filters.minYear !== undefined) {

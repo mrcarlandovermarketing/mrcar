@@ -148,6 +148,40 @@ describe('Mapeo de Vehículos (mapAppsScriptVehicleToDomain)', () => {
     expect(domainVehicle.mainPhoto).toBe('url-single-main');
     expect(domainVehicle.photos).toEqual(['url-single-main']);
   });
+
+  it('debe permitir PRECIO nulo, indefinido o vacío y mapearlo a null en la entidad de dominio', () => {
+    const rawRow1 = {
+      ID: 'test-price-null-1',
+      ESTADO: 'Disponible' as const,
+      MARCA: 'Toyota',
+      MODELO: 'Yaris',
+      ANO: 2018,
+      PRECIO: null,
+      FOTOS: [],
+      FOTO_PRINCIPAL: '',
+      VIN: 'VIN-YARIS',
+    };
+
+    const rawRow2 = {
+      ID: 'test-price-null-2',
+      ESTADO: 'Disponible' as const,
+      MARCA: 'Toyota',
+      MODELO: 'Yaris',
+      ANO: 2018,
+      PRECIO: '',
+      FOTOS: [],
+      FOTO_PRINCIPAL: '',
+      VIN: 'VIN-YARIS',
+    };
+
+    const validated1 = appsScriptVehicleRowSchema.parse(rawRow1);
+    const domainVehicle1 = mapAppsScriptVehicleToDomain(validated1);
+    expect(domainVehicle1.price).toBeNull();
+
+    const validated2 = appsScriptVehicleRowSchema.parse(rawRow2);
+    const domainVehicle2 = mapAppsScriptVehicleToDomain(validated2);
+    expect(domainVehicle2.price).toBeNull();
+  });
 });
 
 describe('AppsScriptVehicleRepository', () => {

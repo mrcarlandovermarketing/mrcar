@@ -105,14 +105,19 @@ export const appsScriptVehicleRowSchema = z.object({
     }),
   TIPO_VEHICULO: nullableStringSchema,
   PRECIO: z
-    .union([z.number(), z.string()])
+    .union([z.number(), z.string(), z.null(), z.undefined()])
     .transform((val) => {
-      const parsed = typeof val === 'number' ? val : parseFloat(String(val).replace(/[^0-9.-]/g, ''));
-      return isNaN(parsed) ? 0 : parsed;
+      if (val === null || val === undefined) return null;
+      if (typeof val === 'number') return val;
+      const clean = String(val).trim();
+      if (clean === '') return null;
+      const parsed = parseFloat(clean.replace(/[^0-9.-]/g, ''));
+      return isNaN(parsed) ? null : parsed;
     })
-    .refine((val) => val >= 0, {
-      message: 'PRECIO (price) must be positive',
-    }),
+    .refine((val) => val === null || val >= 0, {
+      message: 'PRECIO (price) must be positive or null',
+    })
+    .default(null),
   MILLAJE: coerceNumberOptional,
   COLOR_EXTERIOR: nullableStringSchema,
   COLOR_INTERIOR: nullableStringSchema,

@@ -16,7 +16,7 @@ export interface Vehicle {
   version: string;
   year: number;
   vehicleType: string; // TIPO_VEHICULO -> vehicleType
-  price: number;
+  price: number | null;
   mileage: number;
   exteriorColor: string;
   interiorColor: string;

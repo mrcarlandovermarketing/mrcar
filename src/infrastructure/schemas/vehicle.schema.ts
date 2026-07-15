@@ -11,6 +11,16 @@ const coerceNumber = z.union([z.number(), z.string()]).transform((val) => {
   return isNaN(parsed) ? 0 : parsed;
 });
 
+// Helper to coerce optional or empty price input into a number or null
+const coercePrice = z.union([z.number(), z.string(), z.null(), z.undefined()]).transform((val) => {
+  if (val === null || val === undefined) return null;
+  if (typeof val === 'number') return val;
+  const cleaned = val.trim();
+  if (cleaned === '') return null;
+  const parsed = parseFloat(cleaned.replace(/[^0-9.-]/g, ''));
+  return isNaN(parsed) ? null : parsed;
+});
+
 // Helper to coerce featured status ('SI' / 'NO', boolean, etc.) into boolean
 const coerceBoolean = z.union([z.boolean(), z.string()]).transform((val) => {
   if (typeof val === 'boolean') return val;
@@ -44,7 +54,7 @@ export const googleSheetsVehicleSchema = z.object({
   MODELO: z.string().min(1),
   VERSIÓN: z.string().default(''),
   AÑO: coerceNumber,
-  PRECIO: coerceNumber,
+  PRECIO: coercePrice.default(null),
   MILLAJE: coerceNumber,
   "COLOR EXTERIOR": z.string().default(''),
   "COLOR INTERIOR": z.string().default(''),
@@ -119,7 +129,7 @@ export const vehicleSchema = z.object({
   version: z.string(),
   year: z.number(),
   vehicleType: z.string(),
-  price: z.number(),
+  price: z.number().nullable(),
   mileage: z.number(),
   exteriorColor: z.string(),
   interiorColor: z.string(),
